@@ -1,4 +1,4 @@
-# 🛒 Tienda Online con Sistema de Clientes VIP y Descuentos
+# 🛒 Prueba Tecnica Eccomerce
 
 Este proyecto es una aplicación web de tienda en línea que incluye:
 
@@ -20,6 +20,27 @@ Este proyecto es una aplicación web de tienda en línea que incluye:
 | Autenticación| JWT                          |
 
 ---
+
+
+## 🧠 Elección de Tecnologías y Adaptaciones Realizadas
+
+### ❓ ¿Por qué Django?
+
+- **Evaluación más realista y completa**: Tener un backend funcional permite evaluar no solo la interfaz, sino también la lógica del negocio, la persistencia de datos y la seguridad.
+- **Mejor manejo de estados y lógica compleja**: Lógicas como la aplicación dinámica de promociones, verificación de estados VIP, y el historial de cambios se gestionan de forma mucho más clara y mantenible desde el backend.
+- **Autenticación real**: Se usó JWT para manejar sesiones de usuario, algo fundamental para sistemas con roles diferenciados como clientes y administradores.
+- **Simulación de un entorno real de producción**: Este stack refleja un caso de uso profesional, ideal para probar integraciones entre frontend y backend.
+
+### 🛠️ Adaptaciones sobre el enunciado original
+
+- **Parámetros simulados pasaron a ser funcionales**: En lugar de simular condiciones (como "si un cliente es VIP"), se implementó un sistema real de autenticación y validación de estados desde el backend.
+- **Promociones más completas**: Se incorporó una lógica más robusta para aplicar o descartar promociones según el tipo de cliente, el subtotal y las fechas especiales.
+- **Historial de clientes VIP**: Se implementó el seguimiento de entradas y salidas del estado VIP, algo que no estaba explícito en el enunciado original, pero agrega mucho valor al análisis.
+- **Separación real de roles (VIP, No VIP, Admin)**: Se desarrollaron vistas y permisos diferenciados según el tipo de usuario autenticado.
+- **Ajustes en las reglas de descuentos**: Se modificaron algunos criterios de promoción para que tengan mayor sentido desde el punto de vista del negocio. Por ejemplo, se ajustó la lógica del producto bonificado: para obtenerlo, el cliente debe comprar al menos 2 unidades del mismo producto; de lo contrario, la bonificación no se aplica. Esto evita abusos y refleja mejor una promoción comercial real.
+
+
+
 ---
 
 ## 🔧 Credenciales
