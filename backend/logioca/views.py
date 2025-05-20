@@ -253,12 +253,13 @@ def descuentos_especiales_view(request):
         monto_minimo = data.get('monto_minimo')
         descuento = data.get('descuento')
         descripcion = data.get('descripcion', '')
+        print('data',data)
 
         if not fecha or monto_minimo is None or descuento is None:
-            return Response({'error': 'Faltan campos'}, status=400)
+            return Response({'error': 'Faltan campos'}, status=403)
 
         if ConfiguracionDescuento.objects.filter(fecha_especial=fecha).exists():
-            return Response({'error': 'Ya existe una promoción en esa fecha.'}, status=400)
+            return Response({'error': 'Ya existe una promoción en esa fecha.'}, status=403)
 
         ConfiguracionDescuento.objects.create(
             fecha_especial=fecha,

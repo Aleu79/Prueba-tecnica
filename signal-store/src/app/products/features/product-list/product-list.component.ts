@@ -21,7 +21,6 @@ export default class ProductListComponent {
 
   @HostListener('window:scroll', [])
   onScroll() {
-    console.log('ScrollY:', window.scrollY);
     this.showScrollTop = window.scrollY > 80;
   }
   

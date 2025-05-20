@@ -65,7 +65,6 @@ Este proyecto es una aplicación web de tienda en línea que incluye:
 
 ### Frontend (Angular)
 
-- `src/app/components/`: componentes de cliente y administrador.
 - `src/app/services/`: lógica de negocio separada por servicios (`ClienteService`, `CartApiService`, etc).
 - `src/app/pipes/`: pipes personalizados (`CapitalizePipe`).
 - `src/app/guards/`: `AuthGuard` para proteger rutas.
@@ -100,9 +99,9 @@ El sistema registra las promociones no aplicadas por conflicto de reglas (ej. un
 |--------|------------------------------------|------------------------------------------|
 | GET    | `/clientes/vip/`                   | Lista clientes VIP                       |
 | GET    | `/clientes/no-vip/`                | Lista clientes no VIP                    |
-| POST   | `/cart/create/`                    | Crea carrito, aplica descuentos          |
+| POST   | `/api/cart/`                    | Crea carrito, aplica descuentos          |
 | GET    | `/historial-cambios-vip/?mes=AAAA-MM` | Cambios de estado VIP por mes         |
-| POST   | `/descuentos/crear/`              | Crea descuentos por fecha especial       |
+| POST   | `/descuentos/`              | Crea descuentos por fecha especial       |
 
 ---
 
@@ -142,9 +141,8 @@ python manage.py runserver
 ### Frontend (Angular)
 
 ```bash
-instalar Angular CLI antes.
-cd frontend/
+cd signal-store/
 npm install         
-ng serve
+npm run start
 ```
 
