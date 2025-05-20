@@ -1,0 +1,45 @@
+<div class="max-w-sm w-full bg-white rounded-[25px] shadow-lg p-6 h-[460px] flex flex-col justify-between">
+  <a
+    [routerLink]="['/product', product().id]"
+    class="block hover:opacity-90 transition-opacity"
+  >
+    <img
+      [src]="product().image"
+      alt="Imagen del producto"
+      class="w-full h-56 object-contain mb-4"
+    />
+    <h2 class="text-xl font-semibold text-[#333] mb-1 line-clamp-2">
+      {{ product().title }}
+    </h2>
+    <p class="text-[14px] text-gray-900 mb-4 line-clamp-2">
+      {{ product().description }}
+    </p>
+  </a>
+
+  <div class="flex items-center justify-between mt-4">
+    <span class="text-xl text-[#333]">
+      ${{ product().price }}
+    </span>
+    <button
+      (click)="add($event)"
+      class="flex items-center gap-1 px-3 py-1.5 text-sm text-white bg-blue-400 hover:bg-blue-500 rounded-full transition-colors"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M6 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM17 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+        <path d="M6 5h14l-1.5 9H6z" />
+        <path d="M6 5L5 2H2" />
+      </svg>
+      Agregar al carrito
+    </button>
+  </div>
+</div>

@@ -1,0 +1,127 @@
+<section class="bg-white py-5 antialiased dark:bg-gray-900">
+  <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+      Carrito de compras
+    </h2>
+
+    <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
+      <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
+        <div *ngIf="state.products().length === 0" class="flex flex-col items-center justify-center text-center space-y-6 py-12">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="80"
+               height="80"
+               viewBox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="1.5"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="text-gray-400 dark:text-gray-600">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M17 17h-11v-14h-2" />
+            <path d="M6 5l14 1l-1 7h-13" />
+          </svg>
+          <p class="text-lg font-medium text-gray-600 dark:text-gray-400">
+            Todavía no tenés ningún producto en el carrito.
+          </p>
+          <a
+            routerLink="/"
+            class="w-[50%] rounded-[20px] border border-black bg-white py-1.5 px-2 hover:bg-gray-100 transition"
+          >
+            Seleccionar productos
+          </a>
+        </div>
+
+        <div *ngIf="state.products().length > 0" class="space-y-6">
+          @for (cartItem of state.products(); track cartItem.product.id) {
+            <app-cart-item
+              class="block"
+              [productCartItem]="cartItem"
+              (onRemove)="onRemove($event)"
+              (onDecrease)="onDecrease($event)"
+              (onIncrease)="onIncrease($event)"
+            />
+          }
+        </div>
+      </div>
+
+      <div *ngIf="state.products().length > 0" class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
+        <div *ngIf="carrito()?.promocion_especial_disponible && !carrito()?.aplico_promocion_especial" class="rounded-md border border-yellow-300 bg-yellow-50 p-4">
+          <p class="text-yellow-700 font-medium">
+            🎉 Hay una promoción especial disponible: <strong>{{ carrito()?.promocion_especial_disponible.descripcion }}</strong><br>
+            Comprá por al menos <strong>{{ carrito()?.promocion_especial_disponible.monto_minimo | currency }}</strong> para aprovecharla.
+          </p>
+        </div>
+
+        <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+          <p class="text-xl font-semibold text-gray-900 dark:text-white">Resumen del pedido</p>
+
+          <div class="space-y-4">
+            <dl class="flex items-center justify-between gap-4">
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Subtotal</dt>
+              <dd class="text-base font-medium text-gray-900 dark:text-white">{{ state.price() | currency }}</dd>
+            </dl>
+
+            <div *ngIf="descuentosAplicados().length > 0" class="mt-4 rounded-md bg-green-50 border border-green-200 p-4">
+              <h3 class="mb-2 text-lg font-semibold text-green-800 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Descuentos aplicados
+              </h3>
+              <ul class="space-y-1">
+                <li *ngFor="let descuento of descuentosAplicados()" class="flex items-center justify-between rounded-md bg-green-100 px-3 py-2 text-green-900 shadow-sm">
+                  <span>{{ descuento.split(':')[0] }}:</span>
+                  <span class="font-semibold">{{ descuento.split(':')[1] }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div *ngIf="carrito()?.tipo_carrito === 'especial' && carrito()?.promociones_descartadas?.length">
+              <p class="text-yellow-700 font-semibold">🔒 Las siguientes promociones no se aplicaron por una promoción especial:</p>
+              <ul class="list-disc list-inside text-gray-500 line-through">
+                <li *ngFor="let promo of carrito()?.promociones_descartadas">{{ promo }}</li>
+              </ul>
+            </div>
+
+            <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+              <dt class="text-base font-bold text-gray-900 dark:text-white">Total con descuento</dt>
+              <dd class="text-base font-bold text-gray-900 dark:text-white">
+                {{ totalConDescuento() !== null ? (totalConDescuento() | currency) : (state.price() | currency) }}
+              </dd>
+            </dl>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4 mt-6">
+            <button
+              type="button"
+              class="w-full rounded-[20px] border border-black bg-white py-1.5 px-2 hover:bg-gray-100 transition"
+              (click)="cancelarCompra()"
+            >
+              Cancelar compra
+            </button>
+
+            <button
+              type="button"
+              class="w-full rounded-[20px] bg-blue-500 p-1 text-white hover:bg-blue-600 transition"
+              (click)="comprar()"
+            >
+              Comprar
+            </button>
+          </div>
+
+          <div class="flex items-center justify-center pt-4">
+            <a
+              routerLink="/"
+              class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline transition-colors"
+            >
+              Seguir comprando
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

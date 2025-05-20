@@ -1,0 +1,177 @@
+<div class="px-6 py-4">
+
+  <div *ngIf="!mostrarClientesVIP && !mostrarClientesNoVIP && !mostrarCrearDescuento && !mostrarHistorialVIP">
+    <div class="bg-gradient-to-br from-blue-100 to-white border border-blue-200 rounded-xl p-6 shadow-md text-center">
+      <h2 class="text-2xl font-semibold text-blue-800 mb-3">Bienvenido al Panel de Administración</h2>
+      <p class="text-gray-600 mb-6">Utilizá el menú superior para gestionar clientes, descuentos y revisar el historial VIP.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
+        <div class="p-4 bg-white rounded-xl shadow border transition">
+          <h3 class="text-lg font-semibold text-gray-700 mb-1">Clientes VIP</h3>
+          <p class="text-sm text-gray-500">Consulta y gestiona clientes que califican como VIP.</p>
+        </div>
+        <div class="p-4 bg-white rounded-xl shadow border transition">
+          <h3 class="text-lg font-semibold text-gray-700 mb-1">Clientes No VIP</h3>
+          <p class="text-sm text-gray-500">Visualiza aquellos que aún no alcanzan el estado VIP.</p>
+        </div>
+        <div class="p-4 bg-white rounded-xl shadow border transition">
+          <h3 class="text-lg font-semibold text-gray-700 mb-1">Descuentos Especiales</h3>
+          <p class="text-sm text-gray-500">Crea promociones para fechas especiales o clientes seleccionados.</p>
+        </div>
+        <div class="p-4 bg-white rounded-xl shadow border transition">
+          <h3 class="text-lg font-semibold text-gray-700 mb-1">Historial VIP</h3>
+          <p class="text-sm text-gray-500">Revisa cambios de estado VIP por mes.</p>
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin illustration" class="w-32 h-32 mx-auto opacity-60" />
+      </div>
+    </div>
+  </div>
+  <div *ngIf="mostrarClientesVIP">
+  <h1 class="text-4xl font-bold text-gray-800 mb-8">{{ tituloSeccionActual }}</h1>
+    <div class="flex justify-between items-center px-4 py-2 rounded-t-2xl border-b border-gray-100 mb-3">
+      <span class="text-sm font-semibold text-gray-700 uppercase">Usuarios</span>
+      <span class="text-sm font-semibold text-gray-700 uppercase">Monto gastado</span>
+    </div>
+  
+    <ul class="space-y-4">
+      <li *ngFor="let cliente of clientesVIP" class="p-4 bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div class="flex justify-between items-center">
+          <span class="text-lg font-medium text-gray-800">{{ cliente.username | capitalize }}</span>
+          <span class="text-sm text-gray-600">{{ cliente.total_pagado | currency }}</span>
+        </div>
+        <div class="text-sm text-gray-500 mt-2">
+          <p>Cantidad de compras: {{ cliente.cantidad_compras }}</p>
+          <p>Última evaluación VIP: {{ cliente.fecha_ultima_evaluacion_vip || 'No disponible' }}</p>
+          <p>Días restantes como VIP: {{ cliente.dias_restantes_vip ?? 'N/A' }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <div *ngIf="mostrarClientesNoVIP">
+  <h1 class="text-4xl font-bold text-gray-800 mb-8">{{ tituloSeccionActual }}</h1>
+    <div class="flex justify-between items-center px-4 py-2 rounded-t-2xl border-b border-gray-100 mb-3">
+      <span class="text-sm font-semibold text-gray-700 uppercase">Usuarios</span>
+      <span class="text-sm font-semibold text-gray-700 uppercase">Monto gastado</span>
+    </div>
+  
+    <ul class="space-y-4">
+      <li *ngFor="let cliente of clientesNoVIP" class="p-4 bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div class="flex justify-between items-center">
+          <span class="text-lg font-medium text-gray-800">{{ cliente.username | capitalize }}</span>
+          <span class="text-sm text-gray-600">{{ cliente.total_pagado | currency }}</span>
+        </div>
+        <div class="text-sm text-gray-500 mt-2">
+          <p>Cantidad de compras: {{ cliente.cantidad_compras }}</p>
+          <p>Última evaluación VIP: {{ cliente.fecha_ultima_evaluacion_vip || 'No disponible' }}</p>
+          <p>Días restantes como VIP: {{ cliente.dias_restantes_vip ?? 'N/A' }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+    
+  
+
+  <div *ngIf="mostrarCrearDescuento" class="p-5">
+  <h1 class="text-4xl font-bold text-gray-800 mb-8">{{ tituloSeccionActual }}</h1>
+    <div class="flex items-center justify-center ">
+      <div class="flex flex-col items-start justify-center px-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Nuevo descuento especial</h2>
+      
+        <div class="max-w-lg w-full bg-white border shadow p-6 rounded-[20px] self-center">
+          <div class="p-2">
+            <label class="block mb-1">Fecha Especial</label>
+            <input
+              type="date"
+              [(ngModel)]="nuevoDescuento.fecha_especial"
+              class="w-full border rounded px-3 py-2"
+              required
+            />
+          </div>
+      
+          <div class="p-2">
+            <label class="block mb-1">Monto mínimo de compra ($)</label>
+            <input
+              type="number"
+              [(ngModel)]="nuevoDescuento.monto_minimo"
+              class="w-full border rounded px-3 py-2"
+              min="0"
+              required
+            />
+          </div>
+      
+          <div class="p-2">
+            <label class="block mb-1">Descuento (%)</label>
+            <input
+              type="number"
+              [(ngModel)]="nuevoDescuento.descuento"
+              class="w-full border rounded px-3 py-2"
+              min="0"
+              max="100"
+              required
+            />
+          </div>
+      
+          <div class="p-2">
+            <label class="block mb-1">Descripción</label>
+            <textarea
+              [(ngModel)]="nuevoDescuento.descripcion"
+              class="w-full border rounded px-3 py-2"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+      
+          <button
+            (click)="crearDescuento()"
+            class="bg-blue-500 hover:bg-blue-600 text-white mt-3 px-4 py-2 rounded-[20px] w-full"
+          >
+            Crear descuento
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+  <div *ngIf="mostrarHistorialVIP" class="p-5">
+  <h1 class="text-4xl font-bold text-gray-800 mb-8">{{ tituloSeccionActual }}</h1>
+  <div class="flex items-center justify-center">
+    <div class="max-w-lg w-full bg-white border shadow p-6 rounded-[20px]">
+      <h2 class="text-2xl font-semibold text-gray-700 mb-4">Historial de Cambios VIP</h2>
+  
+      <label class="block font-medium mb-2">Seleccionar mes:</label>
+      <input
+        type="month"
+        [(ngModel)]="mesSeleccionado"
+        class="w-full border rounded px-3 py-2 mb-4"
+      />
+  
+      <div class="flex justify-center mb-4">
+        <button
+          (click)="cargarHistorial()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-[20px] shadow"
+        >
+          Consultar
+        </button>
+      </div>
+  
+      <div *ngIf="historialVIP.length === 0" class="text-gray-500 text-center">No hay datos disponibles para este mes.</div>
+  
+      <ul *ngIf="historialVIP.length > 0" class="space-y-2">
+        <li *ngFor="let cambio of historialVIP" class="p-3 border rounded shadow-sm bg-gray-50">
+          <p><strong>Cliente:</strong> {{ cambio.username }}</p>
+          <p><strong>Cambio:</strong> {{ cambio.accion }}</p>
+          <p><strong>Fecha:</strong> {{ cambio.fecha_cambio | date:'longDate' }}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  
+</div>
