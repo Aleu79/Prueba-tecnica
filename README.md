@@ -79,13 +79,15 @@ Este proyecto es una aplicación web de tienda en línea que incluye:
 - **Más de 10 productos** → $100 de descuento.
 - **Promoción especial por fecha** → $300 si supera un monto mínimo configurado.
 
+🟡 Nota: Si hay una promoción especial por fecha activa y el cliente cumple las condiciones, se descartan automáticamente las demás promociones. Esta promoción tiene prioridad sobre el resto.
+
 ### 🏅 Clientes VIP
 
 - No acceden a promociones normales ni especiales.
 - Obtienen automáticamente:
   - El **producto más barato bonificado**, **si se compran 2 o más unidades del mismo producto**.
   - $500 de descuento adicional **si el subtotal supera $600**.
-  - $5 extra de descuento fijo.
+  - $5 extra de descuento fijo. (agregue esto por los $500 que pedian) 
 
 ### ❗ Promociones descartadas
 
@@ -145,4 +147,20 @@ cd signal-store/
 npm install         
 npm run start
 ```
+
+
+### ❗ Corrección detectada durante el desarrollo
+
+Durante las pruebas, me di cuenta de que había un error lógico importante: la función que evalúa si un cliente debe ser promovido a VIP (evaluar_rol_vip) se ejecutaba antes de guardar la compra actual en la base de datos. Esto provocaba que incluso si el total del mes superaba los $10.000, el cliente no era promovido a VIP porque la compra más reciente todavía no contaba en el cálculo.
+
+Además, noté que faltaban mensajes informativos al usuario cuando se producía un cambio de rol, como por ejemplo:
+
+🎉 ¡Felicidades! Superaste los $10.000 este mes y ahora sos un cliente VIP.
+
+Por cuestiones de transparencia y equidad, no voy a tocar el codigo, así todos tenemos el mismo punto de partida y el mismo tiempo para aplicar las mejoras o correcciones necesarias. Solo se documenta este hallazgo en el README para dejarlo claro.
+
+### ⚠️ Nota sobre la promoción especial por fecha
+Aunque el sistema permite configurar una promoción especial por fecha (ej. $300 de descuento si el monto supera un mínimo), actualmente no está funcionando correctamente. Por defecto, siempre aplicará un descuento fijo de $300, ya que la lógica condicional no quedó finalizada. Pensé que había quedado funcional, pero al final prioricé el enfoque en la experiencia de usuario y el diseño del dashboard, y este detalle se me pasó.
+
+---
 
