@@ -87,7 +87,6 @@ Este proyecto es una aplicación web de tienda en línea que incluye:
 - Obtienen automáticamente:
   - El **producto más barato bonificado**, **si se compran 2 o más unidades del mismo producto**.
   - $500 de descuento adicional **si el subtotal supera $600**.
-  - $5 extra de descuento fijo. (agregue esto por los $500 que pedian) 
 
 ### ❗ Promociones descartadas
 
