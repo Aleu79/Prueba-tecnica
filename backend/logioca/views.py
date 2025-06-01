@@ -195,6 +195,7 @@ def cart_create_view(request):
         'promociones_descartadas': promociones_descartadas,
         'productos': productos,
         'promocion_especial': promocion_especial,
+        'aplico_promocion_especial': aplico_promocion_especial,
     })
 
 @csrf_exempt
