@@ -1,4 +1,4 @@
-<div class="max-w-md mx-auto p-10 rounded-[25px] shadow-xl mt-12 bg-white text-[#333] mt-[5%]">
+<div class="max-w-md mx-auto p-10 rounded-[25px] shadow-xl mt-[5%] bg-white text-[#333]">
   <h2 class="text-2xl font-semibold mb-6">Iniciar Sesión</h2>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -12,14 +12,34 @@
       />
     </div>
 
-    <div class="mb-5">
+    <div class="mb-5 relative">
       <label for="password" class="block mb-2 text-sm font-medium text-[#333]">Contraseña</label>
       <input
         id="password"
-        type="password"
+        [type]="showPassword ? 'text' : 'password'"
         formControlName="password"
-        class="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-sm text-[#333] focus:outline-none focus:ring-2 focus:ring-blue-400"
+        class="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3 text-sm text-[#333] focus:outline-none focus:ring-2 focus:ring-blue-400 pr-12"
       />
+      <button
+        type="button"
+        (click)="togglePasswordVisibility()"
+        class="absolute top-[66%] -translate-y-1/2 right-3 text-gray-500"
+        tabindex="-1"
+      >
+        <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+
+        <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.969 9.969 0 012.09-3.368M6.2 6.2a9.969 9.969 0 013.8-1.2c4.477 0 8.268 2.943 9.542 7a9.969 9.969 0 01-1.343 2.568M9.88 9.88a3 3 0 104.243 4.243M3 3l18 18" />
+        </svg>
+      </button>
     </div>
 
     <div *ngIf="errorMessage" class="mb-5 text-red-500 font-semibold">

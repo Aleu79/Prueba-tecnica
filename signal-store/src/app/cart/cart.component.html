@@ -56,7 +56,7 @@
       >
         <p class="text-yellow-700 font-medium">
           🎉 Hay una promoción especial disponible: 
-          <strong>{{ carrito()?.promocion_especial.descripcion }}</strong><br />
+          <strong>{{ carrito()?.promocion_especial.descripcion | capitalize }}</strong><br />
           Comprá por al menos 
           <strong>{{ carrito()?.promocion_especial.monto_minimo | currency }}</strong> 
           para aprovecharla.

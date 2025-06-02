@@ -3,11 +3,12 @@ import { CartItemComponent } from './ui/cart-item/cart-item.component';
 import { CartStateService } from '../shared/data-access/cart-state.service';
 import { ProductItemCart } from '../shared/interfaces/product.interface';
 import { CurrencyPipe, CommonModule } from '@angular/common';
+import { CapitalizePipe } from '../pipes/capitalize.pipe';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CartItemComponent, CurrencyPipe, CommonModule],
+  imports: [CartItemComponent, CurrencyPipe, CommonModule, CapitalizePipe],
   templateUrl: './cart.component.html',
   styles: ``,
 })

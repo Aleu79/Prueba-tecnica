@@ -18,19 +18,24 @@ export class LoginComponent implements OnInit {
   });
 
   errorMessage = '';
+  showPassword = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private sanitizer: SanitizationService) {}
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
-      this.authService.logout(); // borra sesión activa
+      this.authService.logout();
     }
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit() {
     if (this.loginForm.invalid) return;
-    const rawCredentials = this.loginForm.value;
 
+    const rawCredentials = this.loginForm.value;
     const credentials = this.sanitizer.sanitizeObject(rawCredentials) as { username: string; password: string };
 
     this.authService.login(credentials).subscribe({
@@ -41,3 +46,4 @@ export class LoginComponent implements OnInit {
     });
   }
 }
+
