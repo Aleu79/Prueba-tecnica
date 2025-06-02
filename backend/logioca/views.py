@@ -19,18 +19,22 @@ from .models import Cliente, Carrito, CarritoItem, ConfiguracionDescuento, Histo
 def evaluar_rol_vip(cliente):
     hoy = now().date()
     primer_dia_mes = hoy.replace(day=1)
-    ultimo_dia_mes = hoy.replace(
-        day=calendar.monthrange(hoy.year, hoy.month)[1])
+    ultimo_dia_mes = hoy.replace(day=calendar.monthrange(hoy.year, hoy.month)[1])
 
-    carritos_mes = Carrito.objects.filter(cliente=cliente, fecha__date__range=[
-                                          primer_dia_mes, ultimo_dia_mes])
-    total_mes = carritos_mes.aggregate(Sum('total_pagado'))[
-        'total_pagado__sum'] or 0
+    carritos_mes = Carrito.objects.filter(
+        cliente=cliente,
+        fecha__date__range=[primer_dia_mes, ultimo_dia_mes]
+    )
+    total_mes = carritos_mes.aggregate(Sum('total_pagado'))['total_pagado__sum'] or 0
+
+    mensaje_vip = None
+
     if total_mes > 10000 and cliente.rol != 'vip':
         cliente.rol = 'vip'
         cliente.fecha_ultima_evaluacion_vip = hoy
         cliente.save()
         HistorialVIP.objects.create(cliente=cliente, fecha_inicio=hoy)
+        mensaje_vip = "¡Felicidades! Ahora sos usuario VIP 🎉"
 
     elif not carritos_mes.exists() and cliente.rol == 'vip':
         cliente.rol = 'normal'
@@ -42,7 +46,11 @@ def evaluar_rol_vip(cliente):
         if historial:
             historial.fecha_fin = hoy
             historial.save()
-        # mensaje de te sacamos el viop
+
+        mensaje_vip = "Tu cuenta ha dejado de ser VIP por inactividad."
+
+    return mensaje_vip
+
 
 
 @csrf_exempt
@@ -90,7 +98,7 @@ def cart_create_view(request):
         return Response({'error': 'Token inválido o expirado'}, status=401)
 
     cliente = get_object_or_404(Cliente, user=user)
-    evaluar_rol_vip(cliente)
+
 
     productos = request.data.get('products', [])
     if not productos:
@@ -119,9 +127,9 @@ def cart_create_view(request):
 
         if cliente.rol != 'vip':
             if subtotal >= config.monto_minimo:
-                descuento_total += Decimal('300')
+                descuento_total += config.descuento
                 descripcion = config.descripcion or f"Descuento especial del {config.fecha_especial}"
-                descuentos.append(f"{descripcion}: -$300.00")
+                descuentos.append(f"{descripcion}: -${config.descuento:.2f}")
                 tipo_carrito = 'especial'
                 aplico_promocion_especial = True
 
@@ -133,8 +141,8 @@ def cart_create_view(request):
                 aplico_promocion_especial = False
         else:
             descripcion = config.descripcion or f"Descuento especial del {config.fecha_especial}"
-            promociones_descartadas.append(f"{descripcion}: -$300.00")
-
+            promociones_descartadas.append(f"{descripcion}: -${config.descuento:.2f}")
+            
     if not aplico_promocion_especial:
         if cliente.rol != 'vip':
             if cantidad_total == 4:
@@ -173,6 +181,8 @@ def cart_create_view(request):
 
     total_pagado = max(subtotal_original - descuento_total, 0)
 
+    mensaje_vip = None 
+
     if es_compra_final:
         carrito = Carrito.objects.create(
             cliente=cliente, total_pagado=total_pagado, tipo=tipo_carrito)
@@ -183,6 +193,9 @@ def cart_create_view(request):
                 precio_unitario=Decimal(p['price']),
                 cantidad=p['quantity'],
             )
+
+        mensaje_vip = evaluar_rol_vip(cliente)
+
 
     return Response({
         'username': user.username,
@@ -196,6 +209,7 @@ def cart_create_view(request):
         'productos': productos,
         'promocion_especial': promocion_especial,
         'aplico_promocion_especial': aplico_promocion_especial,
+        'mensaje_vip': mensaje_vip,
     })
 
 @csrf_exempt

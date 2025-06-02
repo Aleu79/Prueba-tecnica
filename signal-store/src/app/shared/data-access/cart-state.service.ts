@@ -122,30 +122,34 @@ export class CartStateService {
   }
   
   
-  finalizarCompra(): void {
-    const products = this.state().products;
-    if (products.length === 0) {
-      alert('El carrito está vacío. Agrega productos antes de comprar.');
-      return;
-    }
-  
-    this._cartApi.finalizarCompra(products).subscribe({
-      next: (res) => {
-        console.log('✅ Compra finalizada con éxito', res);
-        this.descuentos.set(res.descuentos_aplicados || []);
-        this.totalDescuento.set(res.total_pagado ?? null);
-        this.carritoBackend.set(res);
-  
-        this.resetCart();
-  
-        alert(`Compra realizada con éxito.\nTotal pagado: $${res.total_pagado}\nDescuentos:\n${res.descuentos_aplicados.join('\n')}`);
-      },
-      error: (err) => {
-        console.error('❌ Error al finalizar compra', err);
-        alert('Ocurrió un error al procesar la compra.');
-      }
-    });
+finalizarCompra(): void {
+  const products = this.state().products;
+  if (products.length === 0) {
+    alert('El carrito está vacío. Agrega productos antes de comprar.');
+    return;
   }
+
+  this._cartApi.finalizarCompra(products).subscribe({
+    next: (res) => {
+      console.log('✅ Compra finalizada con éxito', res);
+      this.descuentos.set(res.descuentos_aplicados || []);
+      this.totalDescuento.set(res.total_pagado ?? null);
+      this.carritoBackend.set(res);
+
+      this.resetCart();
+
+      alert(`Compra realizada con éxito.\nTotal pagado: $${res.total_pagado}\nDescuentos:\n${res.descuentos_aplicados.join('\n')}`);
+      
+      if (res.mensaje_vip) {
+        alert(res.mensaje_vip);
+      }
+    },
+    error: (err) => {
+      console.error('❌ Error al finalizar compra', err);
+      alert('Ocurrió un error al procesar la compra.');
+    }
+  });
+}
 
   resetCart(): void {
     this.state.clear(null);
