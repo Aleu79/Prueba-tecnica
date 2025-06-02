@@ -81,7 +81,7 @@
               </h3>
               <ul class="space-y-1">
                 <li *ngFor="let descuento of descuentosAplicados()" class="flex items-center justify-between rounded-md bg-green-100 px-3 py-2 text-green-900 shadow-sm">
-                  <span>{{ descuento.split(':')[0] }}:</span>
+                  <span>{{ descuento.split(':')[0] | capitalize }}:</span>
                   <span class="font-semibold">{{ descuento.split(':')[1] }}</span>
                 </li>
               </ul>
