@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service'; 
+import { SanitizationService } from '../../services/sanatizacion/sanitization.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   errorMessage = '';
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(private fb: FormBuilder, private authService: AuthService, private sanitizer: SanitizationService) {}
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
@@ -28,8 +29,9 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.invalid) return;
+    const rawCredentials = this.loginForm.value;
 
-    const credentials = this.loginForm.value as { username: string; password: string };
+    const credentials = this.sanitizer.sanitizeObject(rawCredentials) as { username: string; password: string };
 
     this.authService.login(credentials).subscribe({
       error: (err) => {
