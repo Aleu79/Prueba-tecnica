@@ -8,7 +8,7 @@ import { ClienteService } from '../../services/cliente.service';
 import { DescuentoService } from '../../services/descuento.service';
 import { HistorialService } from '../../services/historial.service';
 import { AdminStateService } from '../../services/admin-state.service';
-import { Cliente } from '../../models/cliente';
+import { Cliente } from '../../shared/interfaces/cliente';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 
 @Component({
@@ -40,8 +40,6 @@ export class AdminDashboardComponent {
   clientesNoVIP: Cliente[] = [];
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
     private descuentoService: DescuentoService,
     private historialService: HistorialService,
     private clienteService: ClienteService,

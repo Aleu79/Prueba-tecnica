@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { LoginCredentials } from '../shared/interfaces/login-credentials';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(credentials: { username: string; password: string }): Observable<any> {
+  login(credentials: LoginCredentials ): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login/`, credentials).pipe(
       tap((res) => {
         console.log('Respuesta del login:', res);
